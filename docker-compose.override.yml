@@ -1,0 +1,29 @@
+# 개발 환경용 Docker Compose 오버라이드
+version: '3.8'
+
+services:
+  app:
+    build:
+      target: builder
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: debug
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:dev
+    ports:
+      - "3000:3000"
+      - "9229:9229"  # 디버깅 포트
+
+  mariadb:
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root@1234
+    volumes:
+      - ./docker/mariadb/init:/docker-entrypoint-initdb.d
+
+  redis:
+    ports:
+      - "6379:6379"

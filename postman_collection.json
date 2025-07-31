@@ -1,0 +1,372 @@
+{
+  "info": {
+    "name": "자동 회계 처리 시스템 API",
+    "description": "은행 거래 내역을 자동으로 분류하여 회계 처리하는 시스템의 API 컬렉션",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "인증 API",
+      "item": [
+        {
+          "name": "관리자 로그인",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.access_token);",
+                  "    pm.test('로그인 성공', function () {",
+                  "        pm.expect(response).to.have.property('access_token');",
+                  "        pm.expect(response.user.userType).to.eql('ADMIN');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('로그인 실패', function () {",
+                  "        pm.response.to.have.status(401);",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "사업자 로그인",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.access_token);",
+                  "    pm.test('로그인 성공', function () {",
+                  "        pm.expect(response).to.have.property('access_token');",
+                  "        pm.expect(response.user.userType).to.eql('BUSINESS_OWNER');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"demo_user\",\n  \"password\": \"business123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "사용자 프로필 조회",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "JWT 토큰 검증",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/verify",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "verify"]
+            }
+          }
+        },
+        {
+          "name": "사용자 생성 (관리자 전용)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new_business_user\",\n  \"password\": \"password123\",\n  \"userType\": \"BUSINESS_OWNER\",\n  \"companyId\": \"com_demo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/users",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "users"]
+            }
+          }
+        },
+        {
+          "name": "모든 사용자 조회 (관리자 전용)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/users",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "users"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "회계 처리 API",
+      "item": [
+        {
+          "name": "거래 내역 자동 분류 처리",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('거래 처리 성공', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('processed_count');",
+                  "    pm.expect(response).to.have.property('classified_count');",
+                  "    pm.expect(response).to.have.property('unclassified_count');",
+                  "    pm.expect(response.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": "bank_transactions.csv",
+                  "description": "은행 거래 내역 파일"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": "rules.json",
+                  "description": "분류 규칙 파일"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/accounting/process",
+              "host": ["{{base_url}}"],
+              "path": ["accounting", "process"]
+            }
+          }
+        },
+        {
+          "name": "거래 내역 조회 - 전체",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounting/records?companyId=com_demo&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["accounting", "records"],
+              "query": [
+                {
+                  "key": "companyId",
+                  "value": "com_demo"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "거래 내역 조회 - 분류된 거래만",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounting/records?companyId=com_demo&status=classified&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["accounting", "records"],
+              "query": [
+                {
+                  "key": "companyId",
+                  "value": "com_demo"
+                },
+                {
+                  "key": "status",
+                  "value": "classified"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "거래 내역 조회 - 미분류 거래만",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounting/records?companyId=com_demo&status=unclassified&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["accounting", "records"],
+              "query": [
+                {
+                  "key": "companyId",
+                  "value": "com_demo"
+                },
+                {
+                  "key": "status",
+                  "value": "unclassified"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "시스템 API",
+      "item": [
+        {
+          "name": "헬스 체크",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// 요청 전 실행되는 스크립트",
+          "console.log('Request to:', pm.request.url.toString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// 모든 응답에 대한 공통 테스트",
+          "pm.test('응답 시간 확인', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "if (pm.response.code !== 200 && pm.response.code !== 201) {",
+          "    pm.test('오류 응답 형식 확인', function () {",
+          "        const response = pm.response.json();",
+          "        pm.expect(response).to.have.property('statusCode');",
+          "        pm.expect(response).to.have.property('message');",
+          "        pm.expect(response).to.have.property('timestamp');",
+          "    });",
+          "}"
+        ]
+      }
+    }
+  ]
+}
