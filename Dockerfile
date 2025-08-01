@@ -35,8 +35,8 @@ RUN npm ci --only=production && npm cache clean --force
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Copy necessary files (환경 변수는 docker-compose에서 주입됨)
-# COPY --chown=nestjs:nodejs .env.example .env
+# Copy necessary files
+COPY --chown=nestjs:nodejs .env.example .env
 
 # Create uploads directory
 RUN mkdir -p uploads && chown -R nestjs:nodejs uploads
