@@ -28,6 +28,15 @@ import { DatabaseModule } from './database/database.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: configService.get('NODE_ENV') === 'development',
         logging: configService.get('NODE_ENV') === 'development',
+        // 연결 재시도 설정
+        retryAttempts: 10,
+        retryDelay: 3000,
+        // 연결 풀 설정
+        extra: {
+          connectionLimit: 10,
+          acquireTimeout: 60000,
+          timeout: 60000,
+        },
       }),
       inject: [ConfigService],
     }),

@@ -99,7 +99,7 @@ mysql -u root -p
 ```
 
 ```sql
-CREATE DATABASE commerce_erp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE commerce_erp CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER 'commerce'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON commerce_erp.* TO 'commerce'@'localhost';
 FLUSH PRIVILEGES;
