@@ -45,7 +45,7 @@ services:
       DATABASE_NAME: ${DATABASE_NAME:-commerce_erp}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
-      ENCRYPTION_KEY: ${ENCRYPTION_KEY:your_32_character_encryption_key}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-your_32_character_encryption_key}
       FILE_UPLOAD_MAX_SIZE: ${FILE_UPLOAD_MAX_SIZE:-10485760}
       ALLOWED_FILE_EXTENSIONS: ${ALLOWED_FILE_EXTENSIONS:-csv,json}
       LOG_LEVEL: ${LOG_LEVEL:-info}
