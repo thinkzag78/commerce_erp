@@ -4,24 +4,24 @@ services:
   # MariaDB Database
   mariadb:
     image: mariadb:10.11
-    container_name: accounting-mariadb
+    container_name: commerce-erp-mariadb
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD:-root@1234}
       MYSQL_DATABASE: ${DATABASE_NAME:-commerce_erp}
-      MYSQL_USER: ${DATABASE_USERNAME:-accounting_user}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD:-root@1234}
+      MYSQL_USER: ${DATABASE_USERNAME:-commerce}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD:-commerce@1234}
       MYSQL_CHARACTER_SET_SERVER: utf8mb4
       MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
     ports:
-      - "${DATABASE_PORT:-3306}:3306"
+      - '${DATABASE_PORT:-3306}:3306'
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./docker/mariadb/init:/docker-entrypoint-initdb.d
     networks:
-      - accounting-network
+      - commerce-erp-network
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
       start_period: 10s
       interval: 10s
       timeout: 5s
@@ -40,8 +40,8 @@ services:
       PORT: ${PORT:-3000}
       DATABASE_HOST: mariadb
       DATABASE_PORT: ${DATABASE_PORT:-3306}
-      DATABASE_USERNAME: ${DATABASE_USERNAME:-accounting_user}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-root@1234}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-commerce}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-commerce@1234}
       DATABASE_NAME: ${DATABASE_NAME:-commerce_erp}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
@@ -50,22 +50,21 @@ services:
       ALLOWED_FILE_EXTENSIONS: ${ALLOWED_FILE_EXTENSIONS:-txt,json}
       LOG_LEVEL: ${LOG_LEVEL:-info}
     ports:
-      - "${PORT:-3000}:3000"
+      - '${PORT:-3000}:3000'
     volumes:
       - app_uploads:/app/uploads
       - app_logs:/app/logs
     networks:
-      - accounting-network
+      - commerce-erp-network
     depends_on:
       mariadb:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "node", "dist/health-check.js"]
+      test: ['CMD', 'node', 'dist/health-check.js']
       start_period: 30s
       interval: 30s
       timeout: 10s
       retries: 3
-
 
 volumes:
   mariadb_data:
@@ -76,5 +75,5 @@ volumes:
     driver: local
 
 networks:
-  accounting-network:
+  commerce-erp-network:
     driver: bridge

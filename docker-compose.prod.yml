@@ -5,7 +5,7 @@ services:
   # Nginx Reverse Proxy
   nginx:
     image: nginx:alpine
-    container_name: accounting-nginx
+    container_name: commerce-erp-nginx
     restart: unless-stopped
     ports:
       - "80:80"
@@ -14,7 +14,7 @@ services:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/ssl:/etc/nginx/ssl
     networks:
-      - accounting-network
+      - commerce-erp-network
     depends_on:
       - app
 
@@ -69,5 +69,5 @@ volumes:
     driver: local
 
 networks:
-  accounting-network:
+  commerce-erp-network:
     driver: bridge
