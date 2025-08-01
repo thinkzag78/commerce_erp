@@ -9,8 +9,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD:-root@1234}
       MYSQL_DATABASE: ${DATABASE_NAME:-commerce_erp}
-      MYSQL_USER: ${DATABASE_USERNAME:-commerce}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD:-commerce@1234}
+      MYSQL_USER: commerce
+      MYSQL_PASSWORD: commerce@1234
       MYSQL_CHARACTER_SET_SERVER: utf8mb4
       MYSQL_COLLATION_SERVER: utf8mb4_general_ci
       # Docker 네트워크에서의 접근을 위한 설정
@@ -50,8 +50,8 @@ services:
       PORT: ${PORT:-3000}
       DATABASE_HOST: mariadb
       DATABASE_PORT: ${DATABASE_PORT:-3306}
-      DATABASE_USERNAME: ${DATABASE_USERNAME:-commerce}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-commerce@1234}
+      DATABASE_USERNAME: commerce
+      DATABASE_PASSWORD: commerce@1234
       DATABASE_NAME: ${DATABASE_NAME:-commerce_erp}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
