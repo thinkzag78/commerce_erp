@@ -46,7 +46,7 @@ nano .env
 # 데이터베이스 설정
 DATABASE_HOST=mariadb
 DATABASE_PORT=3306
-DATABASE_USERNAME=accounting_user
+DATABASE_USERNAME=commerce
 DATABASE_PASSWORD=your_secure_password_here
 DATABASE_NAME=commerce_erp
 
@@ -118,8 +118,8 @@ sudo mysql -u root -p
 
 ```sql
 CREATE DATABASE commerce_erp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'accounting_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON commerce_erp.* TO 'accounting_user'@'localhost';
+CREATE USER 'commerce'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON commerce_erp.* TO 'commerce'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```

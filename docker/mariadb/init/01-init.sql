@@ -33,5 +33,5 @@ CREATE INDEX IF NOT EXISTS idx_rule_keywords_rule_type ON rule_keywords(rule_id,
 CREATE INDEX IF NOT EXISTS idx_file_upload_logs_user_date ON file_upload_logs(user_id, uploaded_at);
 
 -- 권한 설정
-GRANT ALL PRIVILEGES ON commerce_erp.* TO 'accounting_user'@'%';
+GRANT ALL PRIVILEGES ON commerce_erp.* TO 'commerce'@'%';
 FLUSH PRIVILEGES;
