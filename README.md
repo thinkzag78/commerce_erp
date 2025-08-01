@@ -35,7 +35,6 @@ cd commerce_erp
 cp .env.example .env
 
 # Docker로 실행
-# 또는
 docker-compose up -d
 ```
 
@@ -104,6 +103,7 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 ```bash
 curl -X POST http://localhost:3000/api/v1/accounting/process \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -F "files=@bank_transactions.csv" \
   -F "files=@rules.json"
 ```
 
@@ -230,6 +230,7 @@ npm run format
 
 1. **포트 충돌**: `lsof -i :3000`으로 확인 후 프로세스 종료
 2. **데이터베이스 연결 실패**: `docker-compose logs mariadb`로 로그 확인
+3. **파일 업로드 오류**: 파일 형식(.csv, .json)과 크기(10MB 이하) 확인
 
 ### 로그 확인
 
@@ -243,13 +244,5 @@ docker-compose logs mariadb
 # 실시간 로그 모니터링
 docker-compose logs -f app
 ```
-
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-5. Open a Pull Request
-
-## 라이선스
 
 
