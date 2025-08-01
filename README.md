@@ -28,14 +28,13 @@
 
 ```bash
 # 저장소 클론
-git clone <repository-url>
+git clone https://github.com/thinkzag78/commerce_erp
 cd commerce_erp
 
 # 환경 변수 설정
 cp .env.example .env
 
 # Docker로 실행
-./scripts/deploy.sh development
 # 또는
 docker-compose up -d
 ```
@@ -105,7 +104,6 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 ```bash
 curl -X POST http://localhost:3000/api/v1/accounting/process \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -F "files=@bank_transactions.txt" \
   -F "files=@rules.json"
 ```
 
@@ -232,7 +230,6 @@ npm run format
 
 1. **포트 충돌**: `lsof -i :3000`으로 확인 후 프로세스 종료
 2. **데이터베이스 연결 실패**: `docker-compose logs mariadb`로 로그 확인
-3. **파일 업로드 오류**: 파일 형식(.txt, .json)과 크기(10MB 이하) 확인
 
 ### 로그 확인
 
@@ -247,21 +244,12 @@ docker-compose logs mariadb
 docker-compose logs -f app
 ```
 
-## 기여하기
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
 ## 라이선스
 
-이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
-## 지원
-
-- 📖 **문서**: `docs/` 디렉토리의 상세 가이드 참조
-- 🐛 **버그 리포트**: GitHub Issues 사용
-- 💬 **질문 및 토론**: GitHub Discussions 활용
-- 📧 **기술 지원**: 프로젝트 관리자에게 문의
