@@ -49,7 +49,7 @@ services:
     container_name: commerce_erp
     restart: unless-stopped
     environment:
-      NODE_ENV: ${NODE_ENV:-production}
+      NODE_ENV: ${NODE_ENV:-development}
       PORT: ${PORT:-3000}
       DATABASE_HOST: mariadb
       DATABASE_PORT: ${DATABASE_PORT:-3306}
