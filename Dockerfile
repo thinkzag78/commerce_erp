@@ -1,6 +1,10 @@
 # Multi-stage build for production optimization
 FROM node:20-alpine AS builder
 
+# Build arguments
+ARG BUILD_ENV=development
+ARG NODE_ENV=development
+
 # Set working directory
 WORKDIR /app
 
@@ -13,8 +17,14 @@ RUN npm ci && npm cache clean --force
 # Copy source code
 COPY . .
 
+# Copy appropriate environment file based on BUILD_ENV
+COPY .env.${BUILD_ENV} .env
+
+# Set environment variables for build
+ENV NODE_ENV=${NODE_ENV}
+
 # Build the application
-RUN npm run build
+RUN npm run build:dev
 
 # Production stage
 FROM node:20-alpine AS production
@@ -22,7 +32,7 @@ FROM node:20-alpine AS production
 # Create app directory
 WORKDIR /app
 
-# Create non-root user for security
+# Create non-root user for security 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nestjs -u 1001
 

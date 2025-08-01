@@ -43,6 +43,9 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
+      args:
+        BUILD_ENV: development
+        NODE_ENV: development
     container_name: commerce_erp
     restart: unless-stopped
     environment:
