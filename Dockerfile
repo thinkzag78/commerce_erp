@@ -7,14 +7,11 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+# Install all dependencies (including devDependencies for build)
+RUN npm ci && npm cache clean --force
 
 # Copy source code
 COPY . .
-
-# Install package
-RUN npm install
 
 # Build the application
 RUN npm run build
@@ -38,8 +35,8 @@ RUN npm ci --only=production && npm cache clean --force
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Copy necessary files
-COPY --chown=nestjs:nodejs .env.example .env
+# Copy necessary files (환경 변수는 docker-compose에서 주입됨)
+# COPY --chown=nestjs:nodejs .env.example .env
 
 # Create uploads directory
 RUN mkdir -p uploads && chown -R nestjs:nodejs uploads
@@ -52,7 +49,7 @@ EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node dist/health-check.js || exit 1
+  CMD node -e "const http=require('http');const req=http.request({hostname:'localhost',port:process.env.PORT||3000,path:'/health',timeout:3000},(res)=>{process.exit(res.statusCode===200?0:1)});req.on('error',()=>process.exit(1));req.on('timeout',()=>{req.destroy();process.exit(1)});req.end();" || exit 1
 
 # Start the application
 CMD ["node", "dist/main"]

@@ -33,7 +33,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: accounting-app
+    container_name: commerce_erp
     restart: unless-stopped
     environment:
       NODE_ENV: ${NODE_ENV:-production}

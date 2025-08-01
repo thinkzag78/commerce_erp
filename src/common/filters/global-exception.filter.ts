@@ -5,7 +5,6 @@ import {
   HttpException,
   HttpStatus,
   Logger,
-  HttpStatusMessage,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { QueryFailedError } from 'typeorm';
@@ -125,7 +124,19 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   }
 
   private getErrorNameByStatus(status: HttpStatus): string {
-    return HttpStatusMessage[status] ?? 'Error';
+    const statusMessages: Record<number, string> = {
+      [HttpStatus.BAD_REQUEST]: 'Bad Request',
+      [HttpStatus.UNAUTHORIZED]: 'Unauthorized',
+      [HttpStatus.FORBIDDEN]: 'Forbidden',
+      [HttpStatus.NOT_FOUND]: 'Not Found',
+      [HttpStatus.METHOD_NOT_ALLOWED]: 'Method Not Allowed',
+      [HttpStatus.CONFLICT]: 'Conflict',
+      [HttpStatus.UNPROCESSABLE_ENTITY]: 'Unprocessable Entity',
+      [HttpStatus.INTERNAL_SERVER_ERROR]: 'Internal Server Error',
+      [HttpStatus.SERVICE_UNAVAILABLE]: 'Service Unavailable',
+    };
+
+    return statusMessages[status] ?? 'Error';
   }
 
   private logError(
