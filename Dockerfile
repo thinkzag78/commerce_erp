@@ -17,9 +17,6 @@ RUN npm ci && npm cache clean --force
 # Copy source code
 COPY . .
 
-# Copy appropriate environment file based on BUILD_ENV
-COPY .env.${BUILD_ENV} .env
-
 # Set environment variables for build
 ENV NODE_ENV=${NODE_ENV}
 
