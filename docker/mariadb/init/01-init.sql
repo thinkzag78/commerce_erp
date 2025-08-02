@@ -10,8 +10,9 @@ USE commerce_erp;
 GRANT ALL PRIVILEGES ON commerce_erp.* TO 'commerce'@'%';
 
 -- 2. 특정 Docker 네트워크 서브넷에서의 접근 허용 (보안 강화)
--- Docker Compose는 기본적으로 172.x.x.x 대역을 사용
+-- Docker Compose는 기본적으로 172.x.x.x,192.x.x.x 대역을 사용
 GRANT ALL PRIVILEGES ON commerce_erp.* TO 'commerce'@'172.%';
+GRANT ALL PRIVILEGES ON commerce_erp.* TO 'commerce'@'192.%';
 
 -- 3. localhost에서의 접근 허용 (컨테이너 내부 접근용)
 GRANT ALL PRIVILEGES ON commerce_erp.* TO 'commerce'@'localhost';
